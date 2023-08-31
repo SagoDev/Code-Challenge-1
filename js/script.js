@@ -47,7 +47,6 @@ function agregarDatos(){
 
 document.addEventListener("DOMContentLoaded", ()=>{
     
-    const btnBorrarLista = document.getElementById('borrarLista');
     const btnVerLista = document.getElementById('verLista');
     const btnAgregarElem = document.getElementById('agregar');
     const btnBorrarElem = document.getElementById('');
