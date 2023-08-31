@@ -38,7 +38,7 @@ function agregarDatos(){
             apellido: ape,
             grupo: gru,
             sala: sal,
-        })}).then(document.getElementsByClassName('form-control').innerHTML = '');
+        })}).then(alert('Se agregó con éxito'));
 };
 
 document.addEventListener("DOMContentLoaded", ()=>{
