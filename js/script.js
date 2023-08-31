@@ -23,10 +23,10 @@ function mostrarLista(lista) {
 
 function agregarDatos(){
     
-    let nom = document.getElementById('nombre').value;
-    let ape = document.getElementById('apellido').value;
-    let gru = document.getElementById('grupo').value;
-    let sal = document.getElementById('sala').value;
+    let nom = document.getElementById('nombre');
+    let ape = document.getElementById('apellido');
+    let gru = document.getElementById('grupo');
+    let sal = document.getElementById('sala');
 
     fetch(DATA_URL,
         {method:'POST',
@@ -34,11 +34,15 @@ function agregarDatos(){
             'Content-Type': 'application/json'
         },
         body:JSON.stringify({
-            nombre:nom,
-            apellido: ape,
-            grupo: gru,
-            sala: sal,
-        })}).then(alert('Se agregó con éxito'));
+            nombre:nom.value,
+            apellido: ape.value,
+            grupo: gru.value,
+            sala: sal.value
+        })}).then(()=>{ nom.value = '';
+                        ape.value = ''; 
+                        gru.value = ''; 
+                        sal.value = ''; 
+                        alert('Se agregó con éxito');});
 };
 
 document.addEventListener("DOMContentLoaded", ()=>{
