@@ -1,4 +1,10 @@
 const DATA_URL = 'https://crudcrud.com/api/adc54d7744e946cd8ffc1851accabb6d/grupo265';
+const expresiones = {
+	nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$^\s*$/, 
+    apellido: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
+    grupo: /^\d{3}$/,
+    sala: /^\d{1,2}$/ 
+}
 
 function obtenerDatos(flag){ 
     fetch(DATA_URL)
@@ -7,7 +13,10 @@ function obtenerDatos(flag){
     .catch(error=>alert(error));
 }
 
-function agregarDatos(){    
+function validarDatos(){
+
+}
+function agregarDatos(){
     let nom = document.getElementById('nombre');
     let ape = document.getElementById('apellido');
     let gru = document.getElementById('grupo');
@@ -26,8 +35,15 @@ function agregarDatos(){
         })}).then(()=>{ nom.value = '';
                         ape.value = ''; 
                         gru.value = ''; 
-                        sal.value = ''; 
-                        alert('Se agregó con éxito');});
+                        sal.value = '';
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Se agregó con éxito',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    });
 };
 
 function mostrarLista(lista,flag) {    
@@ -82,20 +98,27 @@ Swal.fire({
 document.addEventListener("DOMContentLoaded", ()=>{
     
     const btnVerLista = document.getElementById('verLista');
-    const btnAgregarElem = document.getElementById('agregar');
-    const tabla = document.getElementById('tablaDatos');     
+    const tabla = document.getElementById('tablaDatos');
+    const formulario = document.getElementById('formulario');
+    const inputForm = document.getElementsByClassName('form-control');
     let flagShowList = false;
 
-    btnAgregarElem.addEventListener('click',()=>{agregarDatos();});
     btnVerLista.addEventListener('click',()=>{
         flagShowList = !flagShowList;
         obtenerDatos(flagShowList);
     });
 
-    tabla.addEventListener('click', () => {
-        let boton = event.target;
+    tabla.addEventListener('click', (e) => {
+        let boton = e.target;
         if (boton.classList.contains('btnEliminar')) {
             eliminarElemento(boton.id);
         }
+    });
+
+    formulario.addEventListener('click',(e)=>{ 
+        if(e.target.classList.contains('btnAgregar')){
+            agregarDatos();
+        }       
+        
     });
 });
