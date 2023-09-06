@@ -1,10 +1,4 @@
 const DATA_URL = 'https://crudcrud.com/api/adc54d7744e946cd8ffc1851accabb6d/grupo265';
-const expresiones = {
-	nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$^\s*$/, 
-    apellido: /^[a-zA-ZÀ-ÿ\s]{1,40}$/,
-    grupo: /^\d{3}$/,
-    sala: /^\d{1,2}$/ 
-}
 
 function obtenerDatos(flag){ 
     fetch(DATA_URL)
@@ -13,37 +7,37 @@ function obtenerDatos(flag){
     .catch(error=>alert(error));
 }
 
-function validarDatos(){
-
-}
 function agregarDatos(){
     let nom = document.getElementById('nombre');
     let ape = document.getElementById('apellido');
     let gru = document.getElementById('grupo');
     let sal = document.getElementById('sala');
+    let datos = [nom, ape, gru, sal];
 
-    fetch(DATA_URL,
-        {method:'POST',
-        headers:{
-            'Content-Type': 'application/json'
-        }, 
-        body:JSON.stringify({
-            nombre: nom.value,
-            apellido: ape.value,
-            grupo: gru.value,
-            sala: sal.value
-        })}).then(()=>{ nom.value = '';
-                        ape.value = ''; 
-                        gru.value = ''; 
-                        sal.value = '';
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Se agregó con éxito',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                    });
+    fetch(DATA_URL,{   
+            method:'POST',
+            headers:{'Content-Type': 'application/json'}, 
+            body:JSON.stringify({
+                    nombre: nom.value,
+                    apellido: ape.value,
+                    grupo: gru.value,
+                    sala: sal.value
+            })
+    })
+    .then(()=>{ 
+                datos.forEach(dato => {
+                dato.value = '';
+                dato.classList.remove('is-valid');
+                });                        
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Se agregó con éxito',
+                    showConfirmButton: false,
+                    timer: 1500
+                    })
+                obtenerDatos(true);
+    });
 };
 
 function mostrarLista(lista,flag) {    
@@ -68,29 +62,27 @@ function mostrarLista(lista,flag) {
 };
 
 function eliminarElemento(idElem){
-Swal.fire({
-    title: 'Estas Seguro?',
-    text: "Esto no se puede revertir!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, eliminalo!',
-    cancelButtonText: 'No, dejalo!'    
-    }).then((result) => {
+    Swal.fire({
+        title: 'Estas Seguro?',
+        text: "Esto no se puede revertir!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminalo!',
+        cancelButtonText: 'No, dejalo!'    
+    })
+    .then((result) => {
         if (result.isConfirmed) {
             fetch(`https://crudcrud.com/api/adc54d7744e946cd8ffc1851accabb6d/grupo265/${idElem}`,{
                 method: 'DELETE',
-                headers:{
-                    'Content-Type': 'application/json'
-                }
-            })            
+                headers:{'Content-Type': 'application/json'}
+            });           
             Swal.fire(
                 'Eliminado!',
                 'El registro fue eliminado.',
                 'success'
-            )
-            obtenerDatos(true);                    
+            ).then(()=>{obtenerDatos(true)});                                       
         }
     })
 };
@@ -100,12 +92,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
     const btnVerLista = document.getElementById('verLista');
     const tabla = document.getElementById('tablaDatos');
     const formulario = document.getElementById('formulario');
-    const inputForm = document.getElementsByClassName('form-control');
-    let flagShowList = false;
+    const inputs = document.getElementsByClassName('form-control');
+    let ocultMostr = false;
 
     btnVerLista.addEventListener('click',()=>{
-        flagShowList = !flagShowList;
-        obtenerDatos(flagShowList);
+        ocultMostr = !ocultMostr;
+        obtenerDatos(ocultMostr);
     });
 
     tabla.addEventListener('click', (e) => {
@@ -114,11 +106,34 @@ document.addEventListener("DOMContentLoaded", ()=>{
             eliminarElemento(boton.id);
         }
     });
-
-    formulario.addEventListener('click',(e)=>{ 
-        if(e.target.classList.contains('btnAgregar')){
-            agregarDatos();
-        }       
-        
+    formulario.addEventListener('keyup',(e)=>{
+        if(e.target.classList.contains('form-control')){
+            
+            if(e.target.value === ""){
+                e.target.classList.remove('is-valid');
+                e.target.classList.remove('is-invalid');
+            }
+            else if (!e.target.checkValidity()) {
+                e.target.classList.remove('is-valid');
+                e.target.classList.add('is-invalid');
+            } 
+            else if (e.target.checkValidity()) {
+                e.target.classList.remove('is-invalid');
+                e.target.classList.add('is-valid');
+            }            
+        }
     });
+    formulario.addEventListener('click',(e)=>{
+        if(e.target.classList.contains('btnAgregar')){
+            if (!formulario.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+                formulario.classList.add('was-validated')                
+            }
+            else{
+                agregarDatos();                          
+            }
+            ;                                
+        }
+    }); 
 });

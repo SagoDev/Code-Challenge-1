@@ -14,22 +14,27 @@
         <div class="row">
             <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 b">
                 <h2>Formulario</h2>
-                <form id="formulario">
+                <form class="needs-validation" id="formulario" novalidate>
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Nombre"">
+                        <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
+                        <div class="invalid-feedback">Es necesario poner un nombre</div>
+
                     </div>
                     <div class=" mb-3">
                         <label for="apellido" class="form-label">Apellido</label>
-                        <input type="text" class="form-control" id="apellido" placeholder="Apellido">
+                        <input type="text" class="form-control" id="apellido" placeholder="Apellido" required>
+                        <div class="invalid-feedback">Es necesario poner un apellido</div>
                     </div>
                     <div class="mb-3">
                         <label for="grupo" class="form-label">Grupo</label>
-                        <input type="number" class="form-control" id="grupo" placeholder="Grupo">
+                        <input type="number" min="250" max="270" class="form-control" id="grupo" placeholder="Grupo" required>
+                        <div class="invalid-feedback">Ingrese numero de grupo</div>
                     </div>
                     <div class="mb-3">
                         <label for="sala" class="form-label">Sala</label>
-                        <input type="number" class="form-control" id="sala" placeholder="Sala">
+                        <input type="number" min="1" max="10" class="form-control" id="sala" placeholder="Sala" required>
+                        <div class="invalid-feedback">Ingrese numero de sala</div>
                     </div>
                     <br>
                     <button type="button" class="btn btn-primary btnAgregar" id="agregar">Agregar</button>
@@ -54,6 +59,6 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="js/script.js"></script>
+    <script src="js/script.js"></script>   
 </body>
 </html>
